@@ -7,7 +7,7 @@ namespace lab7ex1
         public void RequestPayment();
 
 
-        public void ConfirmPayment(double paidAmount);
+        public void ConfirmPayment(string paymentMethod, bool success);
         
     }
 }

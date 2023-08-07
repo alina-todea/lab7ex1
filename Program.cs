@@ -54,45 +54,66 @@ Scrieti clasele, apelati metodele, efectuati plati. Pentru verificarea functiona
              */
 
 
-            var pos1 = new Pos(444);
-            var pos2 = new Pos(150);
-            var pos3 = new Pos(120);
-            var casa = new Casa();
-
-
-            pos1.RequestPayment();
-            IContactfulPay classicCard = new ContactfulCard(100);
-            bool successClassicCard = pos1.ProcessSaleCard(classicCard);
-            pos1.ConfirmPayment("Classic Card", successClassicCard);
-
-            Console.WriteLine("");
-
-            pos2.RequestPayment();
-            IContactfulPay contactlessCardAsContactful = new ContactlessCard(200);
-            bool successContactlessCardAsContactful = pos2.ProcessSaleCard(contactlessCardAsContactful);
-            pos2.ConfirmPayment("Contactless Card as Contactful", successContactlessCardAsContactful);
-
-            Console.WriteLine("");
-
-            pos2.RequestPayment();
-            IContactlessPay contactlessCard = new ContactlessCard(200);
-            bool successContactlessCard = pos2.ProcessSaleCard(contactlessCard);
-            pos2.ConfirmPayment("Contactless Card", successContactlessCard);
-
-            Console.WriteLine("");
-
-            pos3.RequestPayment();
-            IContactlessPay phone3 = new Phone(70);
-            bool successPhone = pos3.ProcessSaleCard(phone3);
-            //ConfirmPayment("Phone", successPhone);
-            pos3.ConfirmPayment("Phone", successPhone);
-
-            Console.WriteLine("");
-
-            // plata cash
-            casa.ProcessSaleCash(200);
+           
+            var pos2 = new Pos(0);
+            var casa = new Casa(100, pos2);
             
 
+          
+
+            Console.WriteLine("");
+
+            
+            
+            casa.RequestPayment();
+            string metodaPlata = Console.ReadLine();
+
+            if (metodaPlata=="cash")
+            {
+                casa.ProcessSaleCash(120);
+            }
+            else if (metodaPlata== "card contactless")
+            {
+                //Console.WriteLine("habar n-am sa fac bucata asta");
+                pos2.RequestPayment();
+                IContactlessPay contactlessCard = new ContactlessCard(200);
+                bool successContactlessCard = pos2.ProcessSaleCard(contactlessCard);
+                pos2.ConfirmPayment("Contactless Card", successContactlessCard);
+                Console.WriteLine("==========");
+            }
+            else if (metodaPlata == "card clasic")
+            {
+                //Console.WriteLine("habar n-am sa fac bucata asta");
+                pos2.RequestPayment();
+                IContactfulPay classicCard = new ContactfulCard(100);
+                bool successClassicCard = pos2.ProcessSaleCard(classicCard);
+                pos2.ConfirmPayment("Classic Card", successClassicCard);
+                Console.WriteLine("==========");
+
+            }
+            else if (metodaPlata == "telefon")
+            {
+                //Console.WriteLine("habar n-am sa fac bucata asta");
+                pos2.RequestPayment();
+                IContactlessPay phone3 = new Phone(70);
+                bool successPhone = pos2.ProcessSaleCard(phone3);
+                //ConfirmPayment("Phone", successPhone);
+                pos2.ConfirmPayment("Phone", successPhone);
+                Console.WriteLine("==========");
+
+            }
+            else if (metodaPlata == "card")
+            {
+                pos2.RequestPayment();
+                IContactfulPay contactlessCardAsContactful = new ContactlessCard(200);
+                bool successContactlessCardAsContactful = pos2.ProcessSaleCard(contactlessCardAsContactful);
+                pos2.ConfirmPayment("Contactless Card as Contactful", successContactlessCardAsContactful);
+                Console.WriteLine("==========");
+            }
+            else
+            {
+                Console.WriteLine("nu dam pe caiet");
+            }
         }
     }
 }

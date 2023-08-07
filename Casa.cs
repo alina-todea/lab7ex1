@@ -1,11 +1,17 @@
 ﻿using System;
 namespace lab7ex1
 {
-    public class Casa: CashPay
+    public class Casa: CashPay, IPos
     {
         double SoldCasa { get; set; } = 0;
-        public Casa()
+        double SumaDeIncasat{ get; set; } = 0;
+        Pos pos;
+        bool success = false;
+
+        public Casa(double amount, Pos pos)
         {
+            this.SumaDeIncasat = amount;
+            this.pos = pos;
         }
         /// <summary>
         /// deschidere seif
@@ -29,10 +35,10 @@ namespace lab7ex1
         /// tiparire chitanta
         /// </summary>
         /// <param name="amount"></param>
-        public void PrintBill(double amount)
+        public void PrintBill(double sumaPlatita, double sumadeIncasat)
         {
             Console.WriteLine("==========");
-            Console.WriteLine($"Chitanta \n Suma incasata: {amount} \n Data: {DateTime.UtcNow}\n Metoda de plata: cash");
+            Console.WriteLine($"Chitanta \n Total de plata:  {sumadeIncasat}\n Suma incasata: {sumaPlatita} \n Rest de plata {sumaPlatita-sumadeIncasat} \n Data: {DateTime.UtcNow}\n Metoda de plata: cash");
             Console.WriteLine("==========");
 
         }
@@ -43,14 +49,15 @@ namespace lab7ex1
         /// <returns></returns>
         public bool AddToSeif(double amount)
         {
-            if (amount < 0)
+            var amountForSeif = amount - SumaDeIncasat;
+            if (amountForSeif < 0)
             {
                 return false;
             }
             else
             {
                 SoldCasa += amount;
-                Console.WriteLine($"Incasat Cash: {amount}.");
+                Console.WriteLine($"Adaugat in seif: {SumaDeIncasat}.");
                 return true;
             }
 
@@ -69,9 +76,11 @@ namespace lab7ex1
 
             OpenSeif();
             
+            
             if (AddToSeif(amount))
             {
-                PrintBill(amount);
+                PrintBill(amount, SumaDeIncasat);
+                success = true;
             }
             else
             {
@@ -80,5 +89,30 @@ namespace lab7ex1
             CloseSeif();
          
         }
+
+        /// <summary>
+        /// cere plata
+        /// </summary>
+        /// 
+        public void RequestPayment()
+        {
+            Console.WriteLine($"Suma de plata: {SumaDeIncasat} cash sau card?");
+            pos.Amount = this.SumaDeIncasat;
+        }
+
+        /// <summary>
+        /// confirma incasarea
+        /// </summary>
+        /// <param name="paymentMethod"></param>
+        /// <param name="success"></param>
+        public void ConfirmPayment(string paymentMethod, bool success)
+        {
+            if (success)
+                Console.WriteLine($"{paymentMethod}: plata efectuata cu succes.");
+            else
+
+                Console.WriteLine($"{paymentMethod}: Contactati banca.");
+        }
+
     }
 }
